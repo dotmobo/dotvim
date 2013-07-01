@@ -46,10 +46,8 @@ au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 au FileType html set omnifunc=htmlcomplete#CompleteTags
 "Completion css
 au FileType css set omnifunc=csscomplete#CompleteCSS
-
-"Completion python with specific syntax
-autocmd FileType python set complete+=k~/.vim/syntax/python.vim isk+=.,(
-set omnifunc=pythoncomplete#Complete
+"Completion python with jedi-vim
+au FileType python set omnifunc=pythoncomplete#Complete
 
 "Completion on ctrl+space
 inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
@@ -92,3 +90,8 @@ EOF
 " template for new python file
 autocmd BufNewFile *.py,*.pyw 0read ~/.vim/templates/python.txt
 
+" gui font
+if has('gui_running')
+    set guifont=Monospace\ 12
+    colorscheme desert
+endif
