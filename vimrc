@@ -49,6 +49,11 @@ au FileType css set omnifunc=csscomplete#CompleteCSS
 "Completion python with jedi-vim
 au FileType python set omnifunc=pythoncomplete#Complete
 
+" Longueur maximale des lignes
+" Pour Python
+autocmd Filetype python set textwidth=79
+autocmd Filetype python set cc=+1
+
 "Completion on ctrl+space
 inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
             \ "\<lt>C-n>" :
