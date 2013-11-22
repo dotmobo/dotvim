@@ -100,3 +100,13 @@ if has('gui_running')
     set guifont=Monospace\ 12
     colorscheme desert
 endif
+
+"airline
+let g:airline_powerline_fonts = 1
+set t_Co=256
+set laststatus=2
+let g:airline#extensions#tabline#enabled = 1
+
+"jedi
+let g:jedi#auto_initialization = 1
+let g:jedi#auto_vim_configuration = 1
