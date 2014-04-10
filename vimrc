@@ -1,85 +1,67 @@
-"Vim configuration file
+set encoding=utf-8
 
-"load pathogen
-execute pathogen#infect()
+let mapleader = ','
+nnoremap <Leader><Leader> :bnext<CR>
+nnoremap ;; :bprevious<CR>
 
-"Nerdtree on CTRL+N
-map <C-n> :NERDTreeToggle<CR>
-let g:NERDTreeDirArrows=0
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+" Chargement de Pathogen
+call pathogen#infect()
 
-"no vi compatibility
-set nocompatible
+" Activation de l'indentation automatique
+set autoindent
 
-" load indent plugin
-if has("autocmd")
- filetype plugin on
- filetype plugin indent on
-endif
-
-" syntax options
-syntax on
-set hlsearch
-set incsearch
-set ignorecase
-set showmatch
-set noswapfile
-set tabstop=4
+" Redéfinition des tabulations
+set expandtab
 set shiftwidth=4
 set softtabstop=4
-set expandtab
-set autoindent
-set backspace=indent,eol,start
-set history=100
-set ruler
-set showcmd
-set number
-set nospell
-colorscheme delek
+set tabstop=8
+set scrolloff=999
+set wildmenu
 
-"new tab on CTRL+T
-map <C-t> :tabnew<CR>
-
-"Completion javascript
-au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-"Completion html
-au FileType html set omnifunc=htmlcomplete#CompleteTags
-"Completion css
-au FileType css set omnifunc=csscomplete#CompleteCSS
-"Completion python with jedi-vim
-au FileType python set omnifunc=pythoncomplete#Complete
+" Activation de la détection automatique du type de fichier
+filetype on
+filetype plugin indent on
 
 " Longueur maximale des lignes
 " Pour Python
 autocmd Filetype python set textwidth=79
 autocmd Filetype python set cc=+1
+" Pour html
+autocmd Filetype html set textwidth=
 
-"Completion on ctrl+space
-inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
-            \ "\<lt>C-n>" :
-            \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
-            \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
-            \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
-imap <C-@> <C-Space>
+" Activation de la coloration syntaxique
+syntax on
+set t_Co=256
+let g:airline_powerline_fonts=1
+let g:loaded_autocomplete=1
+colorscheme delek
 
-" Remove all blank on all end line
-"autocmd BufWrite *.py silent! %s/[\r \t]\+$//
+" Activation de la complétion 
+" pour les fichiers python
+au Filetype python set omnifunc=pythoncomplete#Complete
+" pour les fichiers javascript
+au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+" pour les fichiers html
+au FileType html set omnifunc=htmlcomplete#CompleteTags
+" pour les fichiers css
+au FileType css set omnifunc=csscomplete#CompleteCSS
 
-" lauch pyton script with F5
-map <buffer> <F5> :w<CR>:!/usr/bin/env python % <CR>
+" Définition du type de complétion de SuperTab
+" let g:SuperTabDefaultCompletionType = "context"
 
-" Django completion
+" Activation de la visualisation de la documentation
+set completeopt=menuone,longest,preview
+
+" Activation de la complétion pour Django
 function! SetAutoDjangoCompletion()
     let l:tmpPath = split($PWD, '/')
     let l:djangoVar = tmpPath[len(tmpPath)-1].'.settings'
     let $DJANGO_SETTINGS_MODULE=djangoVar
     echo 'Activation de la complétion Django avec : '.djangoVar
-        return 1
+    return 1
 endfunction
-map <F9> :call SetAutoDjangoCompletion()<CR>
 
-
-" Virtual env library completion
+" Activation de la complétion pour les librairies installées dans un virtualenv
 py << EOF
 import os.path
 import sys
@@ -92,8 +74,75 @@ if 'VIRTUAL_ENV' in os.environ:
     execfile(activate_this, dict(__file__=activate_this))
 EOF
 
-" template for new python file
-autocmd BufNewFile *.py,*.pyw 0read ~/.vim/templates/python.txt
+" Exécution des tests unitaires
+nmap <silent><Leader>tf <Esc>:Pytest file<CR>
+nmap <silent><Leader>tc <Esc>:Pytest class<CR>
+nmap <silent><Leader>tm <Esc>:Pytest method<CR>
+
+" Activation de la barre de statut de fugitive
+set laststatus=2
+
+" pep8
+let g:pep8_map='whatever'
+
+" Fonction d'affichage d'un message en inverse vidéo
+function! s:DisplayStatus(msg)
+    echohl Todo
+    echo a:msg
+    echohl None
+endfunction
+
+" Variable d'enregistrement de l'état de la gestion de la souris
+let s:mouseActivation = 1
+
+" Fonction permettant l'activation/désactivation de la gestion de la souris
+function! ToggleMouseActivation()
+    if (s:mouseActivation)
+        let s:mouseActivation = 0
+        set mouse=n
+        set paste
+        call s:DisplayStatus('Désactivation de la gestion de la souris (mode collage)')
+    else
+        let s:mouseActivation = 1
+        set mouse=a
+        set nopaste
+        call s:DisplayStatus('Activation de la gestion de la souris (mode normal)')
+    endif
+endfunction
+
+" Activation par défaut au démarrage de la gestion de la souris
+set mouse=a
+set nopaste
+
+" Fonction de nettoyage d'un fichier :
+"   - remplacement des tabulations par des espaces
+"   - suppresion des caractères ^M en fin de ligne
+function! CleanCode()
+    %retab
+    %s/^M//g
+    call s:DisplayStatus('Code nettoyé')
+endfunction
+
+" Affichage des numéros de ligne
+set number
+" highlight LineNr ctermbg=blue ctermfg=gray
+
+" Surligne la colonne du dernier caractère autorisé par textwidth
+set cc=+1
+highlight colorcolumn ctermbg=darkblue
+
+" Amélioration de la recherche avant et arrière avec surlignement du pattern
+map * <Esc>:exe '2match Search /' . expand('<cWORD>') . '/'<CR><Esc>:exe '/' . expand('<cWORD>') . '/'<CR>
+map ù <Esc>:exe '2match Search /' . expand('<cWORD>') . '/'<CR><Esc>:exe '?' . expand('<cWORD>') . '?'<CR>
+
+
+"Nerdtree on CTRL+N
+map <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeDirArrows=0
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+"new tab on CTRL+T
+map <C-t> :tabnew<CR>
 
 " gui font
 if has('gui_running')
@@ -101,12 +150,6 @@ if has('gui_running')
     colorscheme desert
 endif
 
-"airline
-let g:airline_powerline_fonts = 1
-set t_Co=256
-set laststatus=2
-let g:airline#extensions#tabline#enabled = 1
 
-"jedi
-let g:jedi#auto_initialization = 1
-let g:jedi#auto_vim_configuration = 1
+" template for new python file
+autocmd BufNewFile *.py,*.pyw 0read ~/.vim/templates/python.txt
