@@ -26,6 +26,8 @@ filetype plugin indent on
 " Pour Python
 autocmd Filetype python set textwidth=79
 autocmd Filetype python set cc=+1
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 " Pour html
 autocmd Filetype html set textwidth=
 
