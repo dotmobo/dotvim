@@ -101,7 +101,7 @@ let s:mouseActivation = 1
 function! ToggleMouseActivation()
     if (s:mouseActivation)
         let s:mouseActivation = 0
-        set mouse=n
+        set mouse=c
         set paste
         call s:DisplayStatus('Désactivation de la gestion de la souris (mode collage)')
     else
