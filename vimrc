@@ -29,7 +29,7 @@ autocmd Filetype python set cc=+1
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 " Pour html
-autocmd Filetype html set textwidth=
+autocmd Filetype html set textwidth=79
 
 " Activation de la coloration syntaxique
 syntax on
