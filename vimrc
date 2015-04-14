@@ -4,6 +4,8 @@ let mapleader = ','
 nnoremap <Leader><Leader> :bnext<CR>
 nnoremap ;; :bprevious<CR>
 
+set backspace=indent,eol,start
+
 " Chargement de Pathogen
 call pathogen#infect()
 
