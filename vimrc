@@ -1,13 +1,31 @@
+" Automatic reloading of .vimrc
+autocmd! bufwritepost .vimrc source %
+
+" Quicksave command
+noremap <C-Z> :update<CR>
+vnoremap <C-Z> <C-C>:update<CR>
+inoremap <C-Z> <C-O>:update<CR>
+
+" Encoding UTF8
 set encoding=utf-8
 
+" Disable stupid backup and swap files - they trigger too many events
+" for file system watchers
+set nobackup
+set nowritebackup
+set noswapfile
+
+" Buffers
 let mapleader = ','
 nnoremap <Leader><Leader> :bnext<CR>
 nnoremap ;; :bprevious<CR>
 
+" Backspace
 set backspace=indent,eol,start
 
 " Chargement de Pathogen
 call pathogen#infect()
+call pathogen#helptags()
 
 " Activation de l'indentation automatique
 set autoindent
@@ -20,25 +38,30 @@ set tabstop=8
 set scrolloff=999
 set wildmenu
 
+" Settings for ctrlp
+let g:ctrlp_max_height = 30
+set wildignore+=*.pyc
+set wildignore+=*_build/*
+set wildignore+=*.coverage/*
+
 " Activation de la détection automatique du type de fichier
 filetype on
 filetype plugin indent on
 
-" Longueur maximale des lignes
-" Pour Python
-autocmd Filetype python set textwidth=79
-autocmd Filetype python set cc=+1
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-" Pour html
-autocmd Filetype html set textwidth=79
+" Showing line numbers and length
+set number  " show line numbers
+set tw=79   " width of document (used by gd)
+set nowrap  " don't automatically wrap on load
+set fo-=t   " don't automatically wrap text when typing
+set colorcolumn=80
+highlight ColorColumn ctermbg=233
 
 " Activation de la coloration syntaxique
 syntax on
 set t_Co=256
 let g:airline_powerline_fonts=1
 let g:loaded_autocomplete=1
-colorscheme delek
+color wombat256mod
 
 " Activation de la complétion 
 " pour les fichiers python
@@ -50,11 +73,12 @@ au FileType html set omnifunc=htmlcomplete#CompleteTags
 " pour les fichiers css
 au FileType css set omnifunc=csscomplete#CompleteCSS
 
-" Définition du type de complétion de SuperTab
-" let g:SuperTabDefaultCompletionType = "context"
-
 " Activation de la visualisation de la documentation
 set completeopt=menuone,longest,preview
+
+" autoremove preview after completion
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " Activation de la complétion pour Django
 function! SetAutoDjangoCompletion()
@@ -105,11 +129,13 @@ function! ToggleMouseActivation()
         let s:mouseActivation = 0
         set mouse=c
         set paste
+        set bs=2
         call s:DisplayStatus('Désactivation de la gestion de la souris (mode collage)')
     else
         let s:mouseActivation = 1
         set mouse=a
         set nopaste
+        set bs=2
         call s:DisplayStatus('Activation de la gestion de la souris (mode normal)')
     endif
 endfunction
@@ -117,6 +143,11 @@ endfunction
 " Activation par défaut au démarrage de la gestion de la souris
 set mouse=a
 set nopaste
+set bs=2
+
+" Better copy & paste
+set pastetoggle=<F2>
+set clipboard=unnamed
 
 " Fonction de nettoyage d'un fichier :
 "   - remplacement des tabulations par des espaces
@@ -127,46 +158,18 @@ function! CleanCode()
     call s:DisplayStatus('Code nettoyé')
 endfunction
 
-" Affichage des numéros de ligne
-set number
-" highlight LineNr ctermbg=blue ctermfg=gray
-
-" Surligne la colonne du dernier caractère autorisé par textwidth
-set cc=+1
-highlight colorcolumn ctermbg=darkblue
-
 " Amélioration de la recherche avant et arrière avec surlignement du pattern
 map * <Esc>:exe '2match Search /' . expand('<cWORD>') . '/'<CR><Esc>:exe '/' . expand('<cWORD>') . '/'<CR>
 map ù <Esc>:exe '2match Search /' . expand('<cWORD>') . '/'<CR><Esc>:exe '?' . expand('<cWORD>') . '?'<CR>
 
-
-"Nerdtree on CTRL+N
-map <C-n> :NERDTreeToggle<CR>
-let g:NERDTreeDirArrows=0
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
 "new tab on CTRL+T
 map <C-t> :tabnew<CR>
-
-" gui font
-if has('gui_running')
-    set guifont=Monospace\ 12
-    colorscheme desert
-endif
-
 
 " template for new python file
 autocmd BufNewFile *.py,*.pyw 0read ~/.vim/templates/python.txt
 
-
-" Affichage et masquage de la fenêtre Taglist
-map <F8> <Esc>:TlistToggle<CR> 
-
 " Activation de la complétion Django
-map <F10> <Esc>:call SetAutoDjangoCompletion()<CR>
-
-" Activation de l'historique des modifications
-map <C-h> <Esc>:GundoToggle<CR>
+map <F8> <Esc>:call SetAutoDjangoCompletion()<CR>
 
 " Appel de la fonction d'activation/désactivation de la souris
 map <F4> <Esc>:call ToggleMouseActivation()<CR>
