@@ -110,9 +110,6 @@ nmap <silent><Leader>tm <Esc>:Pytest method<CR>
 " Activation de la barre de statut de fugitive
 set laststatus=2
 
-" pep8
-let g:pep8_map='whatever'
-
 " Fonction d'affichage d'un message en inverse vidéo
 function! s:DisplayStatus(msg)
     echohl Todo
