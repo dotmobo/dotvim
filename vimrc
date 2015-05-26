@@ -12,6 +12,7 @@ endif
 call neobundle#begin(expand('/home/morgan/.vim/bundle'))
 
 " Let NeoBundle manage NeoBundle
+let g:neobundle#install_process_timeout = 1500
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 
@@ -23,7 +24,14 @@ NeoBundle 'scrooloose/syntastic'
 NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'bling/vim-airline'
 NeoBundle 'airblade/vim-gitgutter'
-NeoBundle 'Valloric/YouCompleteMe'
+NeoBundle 'Valloric/YouCompleteMe', {
+     \ 'build'      : {
+        \ 'mac'     : './install.sh --clang-completer',
+        \ 'unix'    : './install.sh --clang-completer',
+        \ 'windows' : './install.sh --clang-completer',
+        \ 'cygwin'  : './install.sh --clang-completer'
+        \ }
+     \ }
 
 " Required:
 call neobundle#end()
