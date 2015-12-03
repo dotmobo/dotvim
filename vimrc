@@ -79,6 +79,9 @@ set softtabstop=4
 set tabstop=8
 set scrolloff=999
 set wildmenu
+set wildmode=list:longest,full
+set hlsearch
+set incsearch
 
 " Settings for ctrlp
 let g:ctrlp_max_height = 30
