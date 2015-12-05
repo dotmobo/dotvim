@@ -5,11 +5,11 @@ if has('vim_starting')
   endif
 
   " Required:
-  set runtimepath+=/home/morgan/.vim/bundle/neobundle.vim/
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 " Required:
-call neobundle#begin(expand('/home/morgan/.vim/bundle'))
+call neobundle#begin(expand('~/.vim/bundle'))
 
 " Let NeoBundle manage NeoBundle
 let g:neobundle#install_process_timeout = 1500
