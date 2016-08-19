@@ -17,6 +17,7 @@ let g:neobundle#install_process_timeout = 1500
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Add or remove your Bundles here:
+NeoBundle 'pydiploy-vim'
 NeoBundle 'tpope/vim-commentary'
 NeoBundle 'kien/ctrlp.vim'
 NeoBundle 'tpope/vim-fugitive'
@@ -32,6 +33,7 @@ NeoBundle 'Valloric/YouCompleteMe', {
         \ 'cygwin'  : './install.sh --clang-completer'
         \ }
      \ }
+NeoBundle 'mattn/emmet-vim'
 
 " Required:
 call neobundle#end()
